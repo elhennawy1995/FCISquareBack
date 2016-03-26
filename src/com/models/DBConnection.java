@@ -14,8 +14,8 @@ public class DBConnection {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager
-					.getConnection("jdbc:mysql://127.9.151.2:3306/firstapp?"
-							+ "user=admin9XGZ5Ef&password=_pwGaa-hXGhJ&characterEncoding=utf8");
+					.getConnection("jdbc:mysql://127.9.144.2:3306/firstapp?"
+							+ "user=adminC6BKSz2&password=qm6vre5EKLlJ&characterEncoding=utf8");
 			//connection = DriverManager
 			//		.getConnection("jdbc:mysql://localhost:3306/se2?"
 			//				+ "user=root&password=486951753&characterEncoding=utf8");
