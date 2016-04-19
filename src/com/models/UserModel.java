@@ -289,5 +289,24 @@ public class UserModel {
 		*/
 		
 	}
-
+	
+	public static Boolean addNewPlace(String name, String description, Double lat, Double lon) throws SQLException
+	{
+		try 
+		{
+			Connection conn = DBConnection.getActiveConnection();
+			String sql = "Insert into places (`name`,`description`,`lat`, `long`) VALUES  (?,?,?,?)";
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			stmt.setString(1, name);
+			stmt.setString(2, description);
+			stmt.setDouble(3, lat);
+			stmt.setDouble(4, lon);
+			stmt.executeUpdate();
+			return true;
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

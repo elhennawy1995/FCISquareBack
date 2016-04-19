@@ -120,7 +120,17 @@ public class Services {
 		return json.toJSONString();
 	}
 	
-
+	@POST
+	@Path("/addPlace")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String addPlaces(@FormParam("name") String name, @FormParam("description") String description,
+	@FormParam("lat") String lat, @FormParam("long") String lon) throws NumberFormatException, SQLException
+		{
+			Boolean status = UserModel.addNewPlace(name, description, Double.parseDouble(lat), Double.parseDouble(lon));
+			JSONObject json = new JSONObject();
+			json.put("status", status ? 1 : 0);
+			return json.toJSONString();
+		}
 	@GET
 	@Path("/")
 	@Produces(MediaType.TEXT_PLAIN)
