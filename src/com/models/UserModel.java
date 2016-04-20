@@ -309,4 +309,23 @@ public class UserModel {
 		}
 		return false;
 	}
+	
+	public static Boolean addComment(int userID, int checkinID, String commentContent)
+	{
+		try 
+		{
+			Connection conn = DBConnection.getActiveConnection();
+			String sql = "Insert into comments (`commentContent`) VALUES  (?) WHERE `userID` = ? AND `checkinID` = ?";
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			stmt.setString(1, commentContent);
+			stmt.setInt(2, userID);
+			stmt.setInt(3, checkinID);
+			stmt.executeUpdate();
+			return true;
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

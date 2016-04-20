@@ -124,13 +124,26 @@ public class Services {
 	@Path("/addPlace")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String addPlaces(@FormParam("name") String name, @FormParam("description") String description,
-	@FormParam("lat") String lat, @FormParam("long") String lon) throws NumberFormatException, SQLException
+			@FormParam("lat") String lat, @FormParam("long") String lon) throws NumberFormatException, SQLException
 		{
 			Boolean status = UserModel.addNewPlace(name, description, Double.parseDouble(lat), Double.parseDouble(lon));
 			JSONObject json = new JSONObject();
 			json.put("status", status ? 1 : 0);
 			return json.toJSONString();
 		}
+	
+	@POST
+	@Path("/addComment")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String addComment(@FormParam("UserID") String userID, @FormParam("checkinID") String checkinID,
+			@FormParam("commentContent") String commentContent)
+		{
+			Boolean status = UserModel.addComment(Integer.parseInt(userID), Integer.parseInt(checkinID), commentContent);
+			JSONObject json = new JSONObject();
+			json.put("status", status ? 1 : 0);
+			return json.toJSONString();
+		}
+	
 	@GET
 	@Path("/")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -139,4 +152,5 @@ public class Services {
 		// Connection URL:
 		// mysql://$OPENSHIFT_MYSQL_DB_HOST:$OPENSHIFT_MYSQL_DB_PORT/
 	}
+	
 }
