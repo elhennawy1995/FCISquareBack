@@ -297,7 +297,7 @@ public class UserModel {
 			Connection conn = DBConnection.getActiveConnection();
 			String sql = "Insert into places (`name`,`description`,`lat`, `long`) VALUES  (?,?,?,?)";
 			PreparedStatement stmt;
-			stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, name);
 			stmt.setString(2, description);
 			stmt.setDouble(3, lat);
@@ -309,4 +309,169 @@ public class UserModel {
 		}
 		return false;
 	}
+	
+	public static Boolean savePlace (String email , String placeName){
+		try{
+			Connection conn = DBConnection.getActiveConnection();
+			String sql = ("Select `id` from users where `email` = ?");
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, email);
+			ResultSet rs = stmt.executeQuery();
+			int uid=0;
+			if(rs.next()){
+				uid = rs.getInt("id");
+			}
+			
+			String sql2 = ("Select `id` from places where `name` = '"+placeName+"'");
+			PreparedStatement stmt2;
+			stmt2 = conn.prepareStatement(sql2);
+			ResultSet rs2 = stmt2.executeQuery();
+			int placeID =0;
+			if(rs2.next()){
+				placeID = rs2.getInt("id");
+			}
+			
+			String sql3 = ("insert into savedplaces(`user_ID` , `place_ID`) values (? ,?)");
+			PreparedStatement stmt3;
+			stmt3 = conn.prepareStatement(sql3, Statement.RETURN_GENERATED_KEYS);
+			stmt3.setInt(1, uid);
+			stmt3.setInt(2, placeID);
+			stmt3.executeUpdate();
+			
+			return true ;
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+				
+		return false;
+	}
+	
+	
+	public static Boolean checkIn (String email , String placeName ){
+		try{
+			Connection conn = DBConnection.getActiveConnection();
+			String sql = ("Select `id` from users where `email` = '"+email+"'");
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
+			int uid=0;
+			if(rs.next()){
+				uid = rs.getInt("id");
+			}
+			
+			String sql2 = ("Select `id` from places where `name` = '"+placeName+"'");
+			PreparedStatement stmt2;
+			stmt2 = conn.prepareStatement(sql2);
+			ResultSet rs2 = stmt2.executeQuery();
+			int placeID =0;
+			if(rs2.next()){
+				placeID = rs2.getInt("id");
+			}
+			
+			String sql3 = ("insert into checkin(`userID` , `placeID`) values ('"+uid+"' ,'"+placeID+"')");
+			PreparedStatement stmt3;
+			stmt3 = conn.prepareStatement(sql3, Statement.RETURN_GENERATED_KEYS);
+			stmt3.executeUpdate();
+			
+			return true ;
+		}
+		
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public static Boolean like (String email , int checkinID){
+		
+		try{
+			Connection conn = DBConnection.getActiveConnection();
+			String sql = ("Select `id` from users where `email` = '"+email+"'");
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql);
+			//stmt.setString(1, email);
+			ResultSet rs = stmt.executeQuery();
+			int uid=0;
+			if(rs.next()){
+				uid = rs.getInt("id");
+			}
+			/*
+			String sql2 = ("Select `id` from places where `name` = '"+checkinID+"'");
+			PreparedStatement stmt2;
+			stmt2 = conn.prepareStatement(sql2);
+			ResultSet rs2 = stmt2.executeQuery();
+			int checkid =0;
+			if(rs2.next()){
+				checkid = rs2.getInt("checkinID");
+			}
+			*/
+			
+			String sql3 = ("insert into likes(`userID` , `checkinID`) values ('"+uid+"' ,'"+checkinID+"')");
+			PreparedStatement stmt3;
+			stmt3 = conn.prepareStatement(sql3, Statement.RETURN_GENERATED_KEYS);
+//			stmt3.setInt(1, uid);
+//			stmt3.setInt(2, placeID);
+			stmt3.executeUpdate();
+			
+			UserModel m = new UserModel ();
+			m.getnotification(uid, checkinID, "Like");
+			return true;
+		}
+		
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	
+	public static Boolean comment (String email , int checkinID , String desc){
+		try{
+			Connection conn = DBConnection.getActiveConnection();
+			String sql = ("Select `id` from users where `email` = '"+email+"'");
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql);
+			//stmt.setString(1, email);
+			ResultSet rs = stmt.executeQuery();
+			int uid=0;
+			if(rs.next()){
+				uid = rs.getInt("id");
+			}
+			
+			String sql3 = ("insert into comment(`user-ID` , `checkin-ID` , `description`) values ('"+uid+"' ,'"+checkinID+"' , '"+desc+"')");
+			PreparedStatement stmt3;
+			stmt3 = conn.prepareStatement(sql3, Statement.RETURN_GENERATED_KEYS);
+			stmt3.executeUpdate();
+			
+			UserModel m = new UserModel ();
+			m.getnotification(uid, checkinID, "comment");
+			
+			return true;
+		}
+			
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public  Boolean getnotification (int userid , int checkinID , String type){
+		try {
+			Connection conn = DBConnection.getActiveConnection();
+			String sql = ("insert into notification(`userID` , `checkinID` , `type`) values ('"+userid+"' ,'"+checkinID+"' , '"+type+"')");
+			PreparedStatement stmt3;
+			stmt3 = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			stmt3.executeUpdate();
+			
+			return true;
+		}
+		
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return false ;
+	}
+	
 }

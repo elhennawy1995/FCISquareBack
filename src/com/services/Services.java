@@ -131,6 +131,53 @@ public class Services {
 			json.put("status", status ? 1 : 0);
 			return json.toJSONString();
 		}
+	
+	@POST
+	@Path("/savePlace")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String savePlaces (@FormParam ("email")String email , @FormParam ("placeName") String placeName){
+		
+		boolean status = UserModel.savePlace(email , placeName);
+		JSONObject json = new JSONObject();
+		json.put("status", status ? 1 : 0);
+		return json.toJSONString();
+	}
+	
+	@POST
+	@Path("/checkin")
+	@Produces (MediaType.TEXT_PLAIN)
+	public String checkin (@FormParam ("email") String email , @FormParam ("placeName") String placeName){
+		
+		boolean status = UserModel.checkIn(email , placeName);
+		JSONObject json = new JSONObject();
+		json.put("status", status ? 1 : 0);
+		return json.toJSONString();
+	}
+	
+	
+	@POST
+	@Path("/likeCheckin")
+	@Produces (MediaType.TEXT_PLAIN)
+	public String likeCheckin (@FormParam ("email") String email , @FormParam ("checkinid") String checkinID){
+		
+		boolean status = UserModel.like(email , Integer.parseInt(checkinID));
+		JSONObject json = new JSONObject();
+		json.put("status", status ? 1 : 0);
+		return json.toJSONString();
+	}
+	
+	@POST
+	@Path("/commentCheckin")
+	@Produces (MediaType.TEXT_PLAIN)
+	public String commetnOnCheckin (@FormParam ("email") String email , @FormParam ("checkinid") String checkinID , 
+			@FormParam ("desc") String desc){
+		
+		boolean status = UserModel.comment(email , Integer.parseInt(checkinID) , desc);
+		JSONObject json = new JSONObject();
+		json.put("status", status ? 1 : 0);
+		return json.toJSONString();
+	}
+	
 	@GET
 	@Path("/")
 	@Produces(MediaType.TEXT_PLAIN)
