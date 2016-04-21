@@ -310,6 +310,7 @@ public class UserModel {
 		return false;
 	}
 	
+<<<<<<< HEAD
 	public static Boolean savePlace (String email , String placeName){
 		try{
 			Connection conn = DBConnection.getActiveConnection();
@@ -452,10 +453,27 @@ public class UserModel {
 		}
 			
 		catch(SQLException e){
+=======
+	public static Boolean addComment(int userID, int checkinID, String commentContent)
+	{
+		try 
+		{
+			Connection conn = DBConnection.getActiveConnection();
+			String sql = "Insert into comments (`commentContent`) VALUES  (?) WHERE `userID` = ? AND `checkinID` = ?";
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			stmt.setString(1, commentContent);
+			stmt.setInt(2, userID);
+			stmt.setInt(3, checkinID);
+			stmt.executeUpdate();
+			return true;
+		}catch(SQLException e){
+>>>>>>> 109b87134cc6f85d3f1b6441ddcdf2cbab9646a5
 			e.printStackTrace();
 		}
 		return false;
 	}
+<<<<<<< HEAD
 	
 	public  Boolean getnotification (int userid , int checkinID , String type){
 		try {
@@ -474,4 +492,6 @@ public class UserModel {
 		return false ;
 	}
 	
+=======
+>>>>>>> 109b87134cc6f85d3f1b6441ddcdf2cbab9646a5
 }
