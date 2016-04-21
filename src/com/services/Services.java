@@ -133,7 +133,7 @@ public class Services {
 		}
 	
 	@POST
-<<<<<<< HEAD
+
 	@Path("/savePlace")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String savePlaces (@FormParam ("email")String email , @FormParam ("placeName") String placeName){
@@ -178,18 +178,9 @@ public class Services {
 		json.put("status", status ? 1 : 0);
 		return json.toJSONString();
 	}
-=======
-	@Path("/addComment")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String addComment(@FormParam("UserID") String userID, @FormParam("checkinID") String checkinID,
-			@FormParam("commentContent") String commentContent)
-		{
-			Boolean status = UserModel.addComment(Integer.parseInt(userID), Integer.parseInt(checkinID), commentContent);
-			JSONObject json = new JSONObject();
-			json.put("status", status ? 1 : 0);
-			return json.toJSONString();
-		}
->>>>>>> 109b87134cc6f85d3f1b6441ddcdf2cbab9646a5
+
+	
+
 	
 	@GET
 	@Path("/")
