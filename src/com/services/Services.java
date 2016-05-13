@@ -21,6 +21,7 @@ import org.json.simple.JSONObject;
 
 import com.models.DBConnection;
 import com.models.UserModel;
+import com.models.Not;
 
 @Path("/")
 public class Services {
@@ -114,11 +115,12 @@ public class Services {
 	//public String getFollowers(@FormParam("email") String email) throws SQLException
 	public String getFollowers(@FormParam("id") String id) throws SQLException
 	{
-		ArrayList<Integer> user = UserModel.followers(Integer.parseInt(id));
+		ArrayList<Integer> user = UserModel.following(Integer.parseInt(id));
 		JSONObject json = new JSONObject();
 		json.put("followers", user);
 		return json.toJSONString();
 	}
+	
 	
 	@POST
 	@Path("/addPlace")
@@ -180,7 +182,15 @@ public class Services {
 	}
 
 	
-
+	@POST
+	@Path ("/getallnotification")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getnotification (@FormParam ("email") String email) throws SQLException{
+		ArrayList<Integer> user = UserModel.getAllNotification(email);
+		JSONObject json = new JSONObject();
+		json.put("ids", user);
+		return json.toJSONString();
+	}
 	
 	@GET
 	@Path("/")
